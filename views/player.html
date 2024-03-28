@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promptbattle</title>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-screen min-h-screen bg-gradient-to-t from-indigo-500 bg-black">
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('state', {
+                state: "",
+                challengeType: "",
+                challengePayload: "",
+                playerImages: {},
+                playerFavorites: {},
+
+                updateState(msg) {
+                    this.state = msg.state
+                    if (msg.challenge !== null) {
+                        this.challengeType = msg.challenge.type
+                        this.challengePayload = msg.challenge.challenge
+                    } else {
+                        this.challengeType = ""
+                        this.challengePayload = ""
+                    }
+
+                    if (msg.playerImages !== null) {
+                        this.playerImages = msg.playerImages
+                    } else {
+                        this.playerImages = {}
+                    }
+
+                    if (msg.playerFavorite !== null) {
+                        this.playerFavorites = msg.playerFavorite
+                    } else {
+                        this.playerFavorites = {}
+                    }
+                }
+            })
+        })
+        webSocket = new WebSocket('ws://localhost:3000/player/{{.ID}}/ws');
+        webSocket.onopen = (event) => {
+            webSocket.send(JSON.stringify({type: "ready"}));
+            console.log('Connected to server');
+        };
+        webSocket.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            if (msg.type === "state") {
+                Alpine.store('state').updateState(msg)
+            }
+        };
+    </script>
+    <div x-data>
+        <template x-if="$store.state.state === 'opening'">
+            <h1 class="mt-8 text-white text-4xl text-center">Promptbattle</h1>
+        </template>
+        <template x-if="$store.state.state !== 'opening' && $store.state.challengePayload !== ''">
+            <h1 class="mt-8 text-white text-3xl text-center" x-text="$store.state.challengePayload"></h1>
+        </template>
+        <template x-if="$store.state.state === 'prompt'">
+            <div id="data" x-data="{ prompt: '' }">
+                <h2 class="text-white text-2xl text-center mt-8">Schreibe deinen Prompt!</h2>
+                <div class="grid mt-32 place-items-center">
+                    <textarea cols="80" rows="12" class="text-lg rounded p-4 border-rose-500 border border-4" type="text" name="prompt" x-model="prompt" x-on:input="webSocket.send(JSON.stringify({type: 'prompt', msg: prompt}))"></textarea>
+                </div>
+            </div>
+        </template>
+        <template x-if="$store.state.state === 'generate'">
+            <h2 class="text-white text-2xl text-center mt-8">Generiere Bilder...</h2>
+        </template>
+        <template x-if="$store.state.state === 'pick'">
+            <div x-data="{clicked: false}">
+                <h2 class="mt-8 text-white text-4xl text-center">Wähle deinen Favoriten!</h2>
+                <section class="flex justify-around mt-16">
+                    <figure>
+                        <img src="https://via.placeholder.com/150" alt="Placeholder">
+                        <figcaption class="mt-12">
+                            <button class="bg-white rounded p-4 border-rose-500 border border-4 block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Wählen</button>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <img src="https://via.placeholder.com/150" alt="Placeholder">
+                        <figcaption class="mt-12">
+                            <button class="bg-white rounded p-4 border-rose-500 border border-4 block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Wählen</button>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <img src="https://via.placeholder.com/150" alt="Placeholder">
+                        <figcaption class="mt-12">
+                            <button class="bg-white rounded p-4 border-rose-500 border border-4 block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Wählen</button>
+                        </figcaption>
+                    </figure>
+                </section>
+            </div>
+        </template>
+        <template x-if="$store.state.state === 'final'">
+            <div>
+                <h2 class="mt-8 text-white text-4xl text-center">Finale!</h2>
+                <section class="flex justify-around mt-32">
+                    <img src="https://via.placeholder.com/150" alt="Placeholder">
+                    <img src="https://via.placeholder.com/150" alt="Placeholder">
+                </section>
+            </div>
+        </template>
+    </div>
+</body>
+</html>

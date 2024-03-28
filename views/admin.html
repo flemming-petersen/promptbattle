@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="h-screen min-h-screen bg-gradient-to-t from-indigo-500 bg-black">
+        <section class="m-auto mt-12 grid col-2 gap-8 w-6/12">
+            <a class="text-center bg-white rounded p-4 border-rose-500 border border-4" href="/admin/state/opening">Opening (Reset)</a>
+            <a class="text-center bg-white rounded p-4 border-rose-500 border border-4" href="/admin/state/announcing">Announcing</a>
+            <a class="text-center bg-white rounded p-4 border-rose-500 border border-4" onclick="startTimer" href="/admin/state/prompt">Prompting</a>
+            <a class="text-center bg-white rounded p-4 border-rose-500 border border-4" href="/admin/state/generate">Generate</a>
+            <a class="text-center bg-white rounded p-4 border-rose-500 border border-4" href="/admin/state/pick">Pick</a>
+            <a class="text-center bg-white rounded p-4 border-rose-500 border border-4" href="/admin/state/final">Final</a>
+        </section>
+        <Section>
+            <h1 class="mt-8 text-white text-xl text-center">Vergangene Sekunden:</h1>
+            <h2 class="text-white text-4xl text-center" id="timer">0</h2>
+        </Section>
+        <script>
+            if (window.location.search.includes("state=prompting")) {
+                let counter = 0;
+                let clock = document.getElementById("timer");
+
+                function startTimer() {
+                    counter++;
+                    clock.textContent = counter;
+                }
+
+                setInterval(startTimer, 1000);
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promptbattle</title>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('state', {
+                state: "",
+                challengeType: "",
+                challengePayload: "",
+                playerPrompts: {},
+                playerImages: {},
+                playerFavorites: {},
+
+                updateState(msg) {
+                    this.state = msg.state
+                    if (msg.challenge !== null) {
+                        this.challengeType = msg.challenge.type
+                        this.challengePayload = msg.challenge.challenge
+                    } else {
+                        this.challengeType = ""
+                        this.challengePayload = ""
+                    }
+
+                    if (msg.playerImages !== null) {
+                        this.playerImages = msg.playerImages
+                    } else {
+                        this.playerImages = {}
+                    }
+
+                    if (msg.playerFavorite !== null) {
+                        this.playerFavorites = msg.playerFavorite
+                    } else {
+                        this.playerFavorites = {}
+                    }
+                },
+
+                updatePrompt(msg) {
+                    this.playerPrompts[msg.playerID] = msg.msg
+                }
+            })
+        })
+        webSocket = new WebSocket('ws://localhost:3000/beamer/ws');
+        webSocket.onopen = (event) => {
+            webSocket.send(JSON.stringify({type: "ready"}));
+            console.log('Connected to server');
+        };
+        webSocket.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            if (msg.type === "state") {
+                Alpine.store('state').updateState(msg)
+            } else if (msg.type === "prompt") {
+                Alpine.store('state').updatePrompt(msg)
+            }
+        };
+    </script>
+    <div x-data>
+        <template x-if="$store.state.state === 'opening'">
+        </template>
+        <template x-if="$store.state.state !== 'opening' && $store.state.challengePayload !== ''">
+            <h1 class="text-3xl text-center" x-text="$store.state.challengePayload"></h1>
+        </template>
+        <template x-if="$store.state.state === 'prompt'">
+            <div>
+                <div x-text="$store.state.playerPrompts['1']">
+                </div>
+                <div x-text="$store.state.playerPrompts['2']">
+                </div>
+            </div>
+        </template>
+        <template x-if="$store.state.state === 'generate'">
+            <h2 class="text-2xl text-center mt-8">Generator work...</h2>
+        </template>
+        <template x-if="$store.state.state === 'pick'">
+            <div x-data="{clicked: false}">
+                <h2 class="text-4xl text-center">Select your fav!</h2>
+                <section class="flex justify-around mt-16">
+                    <figure>
+                        <img src="https://via.placeholder.com/150" alt="Placeholder">
+                        <figcaption class="mt-12">
+                            <button class="block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <img src="https://via.placeholder.com/150" alt="Placeholder">
+                        <figcaption class="mt-12">
+                            <button class="block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <img src="https://via.placeholder.com/150" alt="Placeholder">
+                        <figcaption class="mt-12">
+                            <button class="block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
+                        </figcaption>
+                    </figure>
+                </section>
+            </div>
+        </template>
+        <template x-if="$store.state.state === 'final'">
+            <h2 class="text-4xl text-center">Finale!</h2>
+        </template>
+    </div>
+</body>
+</html>

@@ -6,7 +6,7 @@ import (
 	"github.com/flemming-petersen/promptbattle/config"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/template/html/v2"
+	html "github.com/gofiber/template/html/v2"
 )
 
 type Server struct {
@@ -22,7 +22,7 @@ type Server struct {
 
 func NewServer() *Server {
 	engine := html.New("./views", ".html")
-	engine.Debug(true)
+	engine.Reload(true)
 
 	server := &Server{
 		App: fiber.New(fiber.Config{

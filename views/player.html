@@ -7,9 +7,82 @@
     <title>Promptbattle</title>
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .bg-conic {
+            background-image: conic-gradient(#5356FF 0%,
+                    #5356FF 3%,
+                    #378CE7 3%,
+                    #378CE7 6%,
+                    #5356FF 6%,
+                    #5356FF 9%,
+                    #378CE7 9%,
+                    #378CE7 12%,
+                    #5356FF 12%,
+                    #5356FF 15%,
+                    #378CE7 15%,
+                    #378CE7 18%,
+                    #5356FF 18%,
+                    #5356FF 21%,
+                    #378CE7 21%,
+                    #378CE7 24%,
+                    #5356FF 24%,
+                    #5356FF 27%,
+                    #378CE7 27%,
+                    #378CE7 30%,
+                    #5356FF 30%,
+                    #5356FF 33%,
+                    #378CE7 33%,
+                    #378CE7 36%,
+                    #5356FF 36%,
+                    #5356FF 39%,
+                    #378CE7 39%,
+                    #378CE7 42%,
+                    #5356FF 42%,
+                    #5356FF 45%,
+                    #378CE7 45%,
+                    #378CE7 48%,
+                    #5356FF 48%,
+                    #5356FF 51%,
+                    #378CE7 51%,
+                    #378CE7 54%,
+                    #5356FF 54%,
+                    #5356FF 57%,
+                    #378CE7 57%,
+                    #378CE7 60%,
+                    #5356FF 60%,
+                    #5356FF 63%,
+                    #378CE7 63%,
+                    #378CE7 66%,
+                    #5356FF 66%,
+                    #5356FF 69%,
+                    #378CE7 69%,
+                    #378CE7 72%,
+                    #5356FF 72%,
+                    #5356FF 75%,
+                    #378CE7 75%,
+                    #378CE7 78%,
+                    #5356FF 78%,
+                    #5356FF 81%,
+                    #378CE7 81%,
+                    #378CE7 84%,
+                    #5356FF 84%,
+                    #5356FF 87%,
+                    #378CE7 87%,
+                    #378CE7 90%,
+                    #5356FF 90%,
+                    #5356FF 93%,
+                    #378CE7 93%,
+                    #378CE7 96%,
+                    #5356FF 96%,
+                    #5356FF 99%,
+                    #378CE7 99%,
+                    #378CE7 102%);
+        }
+    </style>
 </head>
 
-<body class="h-screen min-h-screen bg-gradient-to-t from-indigo-500 bg-black">
+<body class="h-screen min-h-screen bg-conic">
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('state', {

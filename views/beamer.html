@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
     <script>
         document.addEventListener('alpine:init', () => {
@@ -45,20 +47,20 @@
                     this.playerPrompts[msg.playerID] = msg.msg
                 }
             })
+            webSocket = new WebSocket('ws://localhost:3000/beamer/ws');
+            webSocket.onopen = (event) => {
+                webSocket.send(JSON.stringify({ type: "ready" }));
+                console.log('Connected to server');
+            };
+            webSocket.onmessage = (event) => {
+                const msg = JSON.parse(event.data);
+                if (msg.type === "state") {
+                    Alpine.store('state').updateState(msg)
+                } else if (msg.type === "prompt") {
+                    Alpine.store('state').updatePrompt(msg)
+                }
+            };
         })
-        webSocket = new WebSocket('ws://localhost:3000/beamer/ws');
-        webSocket.onopen = (event) => {
-            webSocket.send(JSON.stringify({type: "ready"}));
-            console.log('Connected to server');
-        };
-        webSocket.onmessage = (event) => {
-            const msg = JSON.parse(event.data);
-            if (msg.type === "state") {
-                Alpine.store('state').updateState(msg)
-            } else if (msg.type === "prompt") {
-                Alpine.store('state').updatePrompt(msg)
-            }
-        };
     </script>
     <div x-data>
         <template x-if="$store.state.state === 'opening'">
@@ -84,19 +86,22 @@
                     <figure>
                         <img src="https://via.placeholder.com/150" alt="Placeholder">
                         <figcaption class="mt-12">
-                            <button class="block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
+                            <button class="block w-full"
+                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
                         </figcaption>
                     </figure>
                     <figure>
                         <img src="https://via.placeholder.com/150" alt="Placeholder">
                         <figcaption class="mt-12">
-                            <button class="block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
+                            <button class="block w-full"
+                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
                         </figcaption>
                     </figure>
                     <figure>
                         <img src="https://via.placeholder.com/150" alt="Placeholder">
                         <figcaption class="mt-12">
-                            <button class="block w-full" x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
+                            <button class="block w-full"
+                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
                         </figcaption>
                     </figure>
                 </section>
@@ -107,4 +112,5 @@
         </template>
     </div>
 </body>
+
 </html>

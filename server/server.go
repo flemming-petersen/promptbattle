@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/flemming-petersen/promptbattle/config"
+	"github.com/flemming-petersen/promptbattle/models"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	html "github.com/gofiber/template/html/v2"
@@ -12,11 +13,8 @@ import (
 type Server struct {
 	App *fiber.App
 
-	GameState          GameState
-	CurrentChallenge   *config.Challenge
-	PlayerPromptImages map[string][]string
-	PlayerFavorite     map[string]int
-	PlayerPrompts      map[string]string
+	CurrentChallenge *config.Challenge
+	GameState        *models.State
 
 	FrontendMessages map[*websocket.Conn]chan []byte
 }
@@ -29,17 +27,20 @@ func NewServer() *Server {
 		App: fiber.New(fiber.Config{
 			Views: engine,
 		}),
-		GameState:          OpeningState,
-		PlayerPromptImages: map[string][]string{},
-		PlayerFavorite:     map[string]int{},
-		PlayerPrompts:      map[string]string{},
-		FrontendMessages:   make(map[*websocket.Conn]chan []byte),
+		GameState:        models.NewState(),
+		FrontendMessages: make(map[*websocket.Conn]chan []byte),
 	}
 
 	server.App.Get("/player/:id", func(c *fiber.Ctx) error {
+		// check if player exists, no dynamic player creation
+		if !server.GameState.IsPlayerExist(c.Params("id")) {
+			return c.SendStatus(fiber.StatusNotFound)
+		}
+
 		err := c.Render("player", fiber.Map{
 			"ID": c.Params("id"),
 		})
+
 		if err != nil {
 			fmt.Println(err)
 		}

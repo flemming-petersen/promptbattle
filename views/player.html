@@ -87,33 +87,18 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('state', {
-                state: "",
-                challengeType: "",
-                challengePayload: "",
-                playerImages: {},
-                playerFavorites: {},
+                phase: "",
+                players: {},
+                challenge: {},
 
-                updateState(msg) {
-                    this.state = msg.state
-                    if (msg.hasOwnProperty("challenge") && msg.challenge !== null) {
-                        this.challengeType = msg.challenge.type
-                        this.challengePayload = msg.challenge.challenge
-                    } else {
-                        this.challengeType = ""
-                        this.challengePayload = ""
-                    }
+                updateState(event) {
+                    this.phase = event.phase
+                    this.players = event.players
+                    this.challenge = event.challenge
+                },
 
-                    if (msg.hasOwnProperty("playerImages") && msg.playerImages !== null) {
-                        this.playerImages = msg.playerImages
-                    } else {
-                        this.playerImages = {}
-                    }
-
-                    if (msg.hasOwnProperty("playerFavorite") && msg.playerFavorite !== null) {
-                        this.playerFavorites = msg.playerFavorite
-                    } else {
-                        this.playerFavorites = {}
-                    }
+                updatePrompt(event) {
+                    this.players[event.player].prompt = event.prompt
                 }
             })
             webSocket = new WebSocket('ws://localhost:3000/player/{{.ID}}/ws');
@@ -135,32 +120,32 @@
         })
     </script>
     <div x-data>
-        <template x-if="$store.state.state === 'opening'">
+        <template x-if="$store.state.phase === 'opening'">
             <h1 class="mt-8 text-white text-4xl text-center">Promptbattle</h1>
         </template>
-        <template x-if="$store.state.state !== 'opening' && $store.state.challengePayload !== ''">
-            <h1 class="mt-8 text-white text-3xl text-center" x-text="$store.state.challengePayload"></h1>
+        <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge')">
+            <h1 class="mt-8 text-white text-3xl text-center" x-text="$store.state.challenge.challenge"></h1>
         </template>
-        <template x-if="$store.state.state === 'prompt'">
+        <template x-if="$store.state.phase === 'prompting'">
             <div id="data" x-data="{ prompt: '' }">
                 <h2 class="text-white text-2xl text-center mt-5">Schreibe deinen Prompt!</h2>
                 <div class="grid mt-10 place-items-center">
                     <textarea cols="80" rows="12" class="text-lg rounded p-4 border-black border border-4 rounded-3xl"
                         type="text" name="prompt" x-model="prompt"
-                        x-on:input="webSocket.send(JSON.stringify({type: 'prompt', msg: prompt}))"></textarea>
+                        x-on:input="webSocket.send(JSON.stringify({type: 'prompt', prompt: prompt}))"></textarea>
                 </div>
             </div>
         </template>
-        <template x-if="$store.state.state === 'generate'">
+        <template x-if="$store.state.phase === 'generate'">
             <div class="bg-white w-2/6 m-auto p-2 mt-8">
                 <h2 class="text-2xl text-center">Generiere Bilder...</h2>
             </div>
         </template>
-        <template x-if="$store.state.state === 'pick'">
+        <template x-if="$store.state.phase === 'picking'">
             <div x-data="{clicked: false}">
                 <h2 class="mt-8 text-white text-4xl text-center">Wähle deinen Favoriten!</h2>
                 <section class="flex justify-around mt-16">
-                    <template x-for="(image, index) in $store.state.playerImages['{{.ID}}']">
+                    <template x-for="(image, index) in $store.state.players['{{.ID}}'].generatedImages">
                         <figure class="m-5">
                             <img :src="image" alt="Placeholder">
                             <figcaption class="mt-12">
@@ -172,12 +157,13 @@
                 </section>
             </div>
         </template>
-        <template x-if="$store.state.state === 'final'">
+        <template x-if="$store.state.phase === 'final'">
             <div>
                 <h2 class="mt-8 text-white text-4xl text-center">Finale!</h2>
                 <section class="flex justify-around mt-32">
-                    <img :src="$store.state.playerImages['1'][$store.state.playerFavorites['1']]">
-                    <img :src="$store.state.playerImages['2'][$store.state.playerFavorites['2']]">
+                    <template x-for="(player, index) in $store.state.players">
+                        <img :src="player.generatedImages[player.favoriteImage]">
+                    </template>
                 </section>
             </div>
         </template>

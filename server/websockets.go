@@ -79,6 +79,11 @@ func (server *Server) playerWebsocket() func(*fiber.Ctx) error {
 		server.startWebsocket(conn, func(server *Server, msg map[string]interface{}) {
 			playerID := conn.Params("id")
 
+			if !server.GameState.IsPlayerExist(playerID) {
+				fmt.Printf("Player %s does not exist\n", playerID)
+				return
+			}
+
 			messageType := msg["type"].(string)
 			switch messageType {
 			case "ready":
@@ -87,15 +92,22 @@ func (server *Server) playerWebsocket() func(*fiber.Ctx) error {
 			case "prompt":
 				// input message from player, add player before broadcast
 				msg["player"] = playerID
-				server.PlayerPrompts[playerID] = msg["msg"].(string)
+
+				// set prompt for player
+				server.GameState.SetPrompt(playerID, msg["prompt"].(string))
+
+				// broadcast to all players
 				server.broadcastToOther(conn, msg)
 			case "pick":
 				image := int(msg["image"].(float64))
-				server.PlayerFavorite[playerID] = image
+
 				fmt.Printf("Player %s select image %d", playerID, image)
 
-				if len(server.PlayerFavorite) == 2 {
-					server.GameState = FinalState
+				// set favorite image for player
+				server.GameState.SetFavoriteImage(playerID, image)
+
+				if server.GameState.SendAllPlayersFavoriteImage() {
+					server.GameState.SetPhaseFinal()
 					server.broadcastToAll(server.generateStateMsg())
 				}
 			default:

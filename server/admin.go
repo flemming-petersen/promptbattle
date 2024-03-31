@@ -13,14 +13,12 @@ func (server *Server) showAdmin() func(c *fiber.Ctx) error {
 
 func (server *Server) openingRound() func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		server.GameState = OpeningState
+		server.GameState.SetPhaseOpening()
 
 		server.CurrentChallenge = &config.Challenge{
 			Type:      "text",
 			Challenge: "How would Flensburg look like in 100 years?",
 		}
-		server.PlayerPromptImages = map[string][]string{}
-		server.PlayerFavorite = map[string]int{}
 
 		server.broadcastToAll(server.generateStateMsg())
 		return c.Redirect("/admin")
@@ -29,7 +27,8 @@ func (server *Server) openingRound() func(c *fiber.Ctx) error {
 
 func (server *Server) announcingTheme() func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		server.GameState = AnnouncingState
+		server.GameState.SetPhaseAnnouncing()
+
 		server.broadcastToAll(server.generateStateMsg())
 		return c.Redirect("/admin")
 	}
@@ -37,30 +36,31 @@ func (server *Server) announcingTheme() func(c *fiber.Ctx) error {
 
 func (server *Server) startPrompting() func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		server.GameState = PromptState
+		server.GameState.SetPhasePrompting()
+
 		server.broadcastToAll(server.generateStateMsg())
-		return c.Redirect("/admin?state=prompting")
+		return c.Redirect("/admin")
 	}
 }
 
 func (server *Server) generateImages() func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		server.GameState = GenerateState
-		server.broadcastToAll(server.generateStateMsg())
-		server.PlayerPromptImages = map[string][]string{}
+		server.GameState.SetPhaseGenerate()
 
-		server.PlayerPromptImages["1"] = []string{
+		server.broadcastToAll(server.generateStateMsg())
+
+		server.GameState.SetImages("1", []string{
 			"https://placehold.co/600x400",
 			"https://placehold.co/600x400",
 			"https://placehold.co/600x400",
 			"https://placehold.co/600x400",
-		}
-		server.PlayerPromptImages["2"] = []string{
+		})
+		server.GameState.SetImages("2", []string{
 			"https://placehold.co/600x400",
 			"https://placehold.co/600x400",
 			"https://placehold.co/600x400",
 			"https://placehold.co/600x400",
-		}
+		})
 
 		return c.Redirect("/admin")
 	}
@@ -68,8 +68,7 @@ func (server *Server) generateImages() func(c *fiber.Ctx) error {
 
 func (server *Server) startPickImages() func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		server.GameState = PickState
-		server.PlayerFavorite = map[string]int{}
+		server.GameState.SetPhasePicking()
 		server.broadcastToAll(server.generateStateMsg())
 		return c.Redirect("/admin")
 	}
@@ -77,7 +76,7 @@ func (server *Server) startPickImages() func(c *fiber.Ctx) error {
 
 func (server *Server) showFinalImages() func(c *fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		server.GameState = FinalState
+		server.GameState.SetPhaseFinal()
 		server.broadcastToAll(server.generateStateMsg())
 		return c.Redirect("/admin")
 	}

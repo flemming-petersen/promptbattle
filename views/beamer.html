@@ -86,44 +86,18 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('state', {
-                state: "",
-                challengeType: "",
-                challengePayload: "",
-                playerPrompts: {
-                    "1": "",
-                    "2": ""
-                },
-                playerImages: {},
-                playerFavorites: {},
+                phase: "",
+                players: {},
+                challenge: {},
 
-                updateState(msg) {
-                    this.state = msg.state
-                    this.playerPrompts = msg.playerPrompts
-                    if (msg.hasOwnProperty("challenge") && msg.challenge !== null) {
-                        this.challengeType = msg.challenge.type
-                        this.challengePayload = msg.challenge.challenge
-                    } else {
-                        this.challengeType = ""
-                        this.challengePayload = ""
-                    }
-
-                    if (msg.hasOwnProperty("playerImages") && msg.playerImages !== null) {
-                        this.playerImages = msg.playerImages
-                    } else {
-                        this.playerImages = {}
-                    }
-
-                    if (msg.hasOwnProperty("playerFavorite") && msg.playerFavorite !== null) {
-                        this.playerFavorites = msg.playerFavorite
-                    } else {
-                        this.playerFavorites = {}
-                    }
+                updateState(event) {
+                    this.phase = event.phase
+                    this.players = event.players
+                    this.challenge = event.challenge
                 },
 
-                updatePrompt(msg) {
-                    console.log(msg)
-                    this.playerPrompts[msg.player] = msg.msg
-                    console.log("update", this.playerPrompts)
+                updatePrompt(event) {
+                    this.players[event.player].prompt = event.prompt
                 }
             })
             webSocket = new WebSocket('ws://localhost:3000/beamer/ws');
@@ -147,50 +121,46 @@
         })
     </script>
     <div x-data>
-        <template x-if="$store.state.state === 'opening'">
+        <template x-if="$store.state.phase === 'opening'">
             <h1 class="mt-8 text-white text-4xl text-center">Promptbattle</h1>
         </template>
-        <template x-if="$store.state.state !== 'opening' && $store.state.challengePayload !== ''">
-            <h1 class="text-3xl text-center" x-text="$store.state.challengePayload"></h1>
+        <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge')">
+            <h1 class="text-3xl text-center" x-text="$store.state.challenge.challenge"></h1>
         </template>
-        <template x-if="$store.state.state === 'prompt'">
+        <template x-if="$store.state.phase === 'prompting'">
             <div class="flex justify-around m-10">
-                <div x-text="$store.state.playerPrompts['1']" class="bg-white text-lg rounded p-4 border-black border border-4 rounded-3xl w-full mr-5">
-                </div>
-                <div x-text="$store.state.playerPrompts['2']" class="bg-white text-lg rounded p-4 border-black border border-4 rounded-3xl w-full ml-5">
-                </div>
+                <template x-for="(player, index) in $store.state.players">
+                    <div x-text="player.prompt" class="bg-white text-lg rounded p-4 border-black border border-4 rounded-3xl w-full mr-5">
+                    </div>
+                </template>
             </div>
         </template>
-        <template x-if="$store.state.state === 'generate'">
+        <template x-if="$store.state.phase === 'generate'">
             <h2 class="text-2xl text-center mt-8">Generator work...</h2>
         </template>
-        <template x-if="$store.state.state === 'pick'">
+        <template x-if="$store.state.phase === 'picking'">
             <div x-data="{clicked: false}">
                 <h2 class="text-4xl text-center">Select your fav!</h2>
                 <section class="flex justify-around mt-16">
-                    <div class="flex justify-around mr-5">
-                        <template x-for="(image, index) in $store.state.playerImages['1']">
-                            <figure class="m-5">
-                                <img :src="image" alt="Placeholder">
-                            </figure>
-                        </template>
-                    </div>
-                    <div class="flex justify-around ml-5">
-                        <template x-for="(image, index) in $store.state.playerImages['2']">
-                            <figure class="m-5">
-                                <img :src="image" alt="Placeholder">
-                            </figure>
-                        </template>
-                    </div>
+                    <template x-for="(player, index) in $store.state.players">
+                        <div class="flex justify-around mr-5">
+                            <template x-for="(image, index) in player.generatedImages">
+                                <figure class="m-5">
+                                    <img :src="image" alt="Placeholder">
+                                </figure>
+                            </template>
+                        </div>
+                    </template>
                 </section>
             </div>
         </template>
-        <template x-if="$store.state.state === 'final'">
+        <template x-if="$store.state.phase === 'final'">
             <div>
                 <h2 class="mt-8 text-white text-4xl text-center">Finale!</h2>
                 <section class="flex justify-around mt-32">
-                    <img :src="$store.state.playerImages['1'][$store.state.playerFavorites['1']]">
-                    <img :src="$store.state.playerImages['2'][$store.state.playerFavorites['2']]">
+                    <template x-for="(player, index) in $store.state.players">
+                        <img :src="player.generatedImages[player.favoriteImage]">
+                    </template>
                 </section>
             </div>
         </template>

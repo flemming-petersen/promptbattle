@@ -10,6 +10,7 @@
 
     <style>
         .bg-conic {
+            background-color: #378CE7;
             background-image: conic-gradient(#5356FF 0%,
                     #5356FF 3%,
                     #378CE7 3%,
@@ -142,42 +143,32 @@
         </template>
         <template x-if="$store.state.state === 'prompt'">
             <div id="data" x-data="{ prompt: '' }">
-                <h2 class="text-white text-2xl text-center mt-8">Schreibe deinen Prompt!</h2>
-                <div class="grid mt-32 place-items-center">
-                    <textarea cols="80" rows="12" class="text-lg rounded p-4 border-rose-500 border border-4"
+                <h2 class="text-white text-2xl text-center mt-5">Schreibe deinen Prompt!</h2>
+                <div class="grid mt-10 place-items-center">
+                    <textarea cols="80" rows="12" class="text-lg rounded p-4 border-black border border-4 rounded-3xl"
                         type="text" name="prompt" x-model="prompt"
                         x-on:input="webSocket.send(JSON.stringify({type: 'prompt', msg: prompt}))"></textarea>
                 </div>
             </div>
         </template>
         <template x-if="$store.state.state === 'generate'">
-            <h2 class="text-white text-2xl text-center mt-8">Generiere Bilder...</h2>
+            <div class="bg-white w-2/6 m-auto p-2 mt-8">
+                <h2 class="text-2xl text-center">Generiere Bilder...</h2>
+            </div>
         </template>
         <template x-if="$store.state.state === 'pick'">
             <div x-data="{clicked: false}">
                 <h2 class="mt-8 text-white text-4xl text-center">Wähle deinen Favoriten!</h2>
                 <section class="flex justify-around mt-16">
-                    <figure>
-                        <img src="https://via.placeholder.com/150" alt="Placeholder">
-                        <figcaption class="mt-12">
-                            <button class="bg-white rounded p-4 border-rose-500 border border-4 block w-full"
-                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Wählen</button>
-                        </figcaption>
-                    </figure>
-                    <figure>
-                        <img src="https://via.placeholder.com/150" alt="Placeholder">
-                        <figcaption class="mt-12">
-                            <button class="bg-white rounded p-4 border-rose-500 border border-4 block w-full"
-                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Wählen</button>
-                        </figcaption>
-                    </figure>
-                    <figure>
-                        <img src="https://via.placeholder.com/150" alt="Placeholder">
-                        <figcaption class="mt-12">
-                            <button class="bg-white rounded p-4 border-rose-500 border border-4 block w-full"
-                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Wählen</button>
-                        </figcaption>
-                    </figure>
+                    <template x-for="(image, index) in $store.state.playerImages['{{.ID}}']">
+                        <figure class="m-5">
+                            <img :src="image" alt="Placeholder">
+                            <figcaption class="mt-12">
+                                <button class="bg-white rounded p-4 border-black border border-4 rounded-3xl block w-full"
+                                    x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: index}))">Wählen</button>
+                            </figcaption>
+                        </figure>
+                    </template>
                 </section>
             </div>
         </template>
@@ -185,8 +176,8 @@
             <div>
                 <h2 class="mt-8 text-white text-4xl text-center">Finale!</h2>
                 <section class="flex justify-around mt-32">
-                    <img src="https://via.placeholder.com/150" alt="Placeholder">
-                    <img src="https://via.placeholder.com/150" alt="Placeholder">
+                    <img :src="$store.state.playerImages['1'][$store.state.playerFavorites['1']]">
+                    <img :src="$store.state.playerImages['2'][$store.state.playerFavorites['2']]">
                 </section>
             </div>
         </template>

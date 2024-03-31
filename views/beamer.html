@@ -9,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .bg-conic {
+            background-color: #378CE7;
             background-image: conic-gradient(#5356FF 0%,
                     #5356FF 3%,
                     #378CE7 3%,
@@ -81,7 +82,7 @@
     </style>
 </head>
 
-<body class="h-screen min-h-screen w-screen bg-conic">
+<body class="h-screen min-h-screen bg-conic">
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('state', {
@@ -141,6 +142,7 @@
     </script>
     <div x-data>
         <template x-if="$store.state.state === 'opening'">
+            <h1 class="mt-8 text-white text-4xl text-center">Promptbattle</h1>
         </template>
         <template x-if="$store.state.state !== 'opening' && $store.state.challengePayload !== ''">
             <h1 class="text-3xl text-center" x-text="$store.state.challengePayload"></h1>
@@ -160,32 +162,31 @@
             <div x-data="{clicked: false}">
                 <h2 class="text-4xl text-center">Select your fav!</h2>
                 <section class="flex justify-around mt-16">
-                    <figure>
-                        <img src="https://via.placeholder.com/150" alt="Placeholder">
-                        <figcaption class="mt-12">
-                            <button class="block w-full"
-                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
-                        </figcaption>
-                    </figure>
-                    <figure>
-                        <img src="https://via.placeholder.com/150" alt="Placeholder">
-                        <figcaption class="mt-12">
-                            <button class="block w-full"
-                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
-                        </figcaption>
-                    </figure>
-                    <figure>
-                        <img src="https://via.placeholder.com/150" alt="Placeholder">
-                        <figcaption class="mt-12">
-                            <button class="block w-full"
-                                x-on:click="clicked=true; webSocket.send(JSON.stringify({type: 'pick', image: 1}))">Choose</button>
-                        </figcaption>
-                    </figure>
+                    <div class="flex justify-around mr-5">
+                        <template x-for="(image, index) in $store.state.playerImages['1']">
+                            <figure class="m-5">
+                                <img :src="image" alt="Placeholder">
+                            </figure>
+                        </template>
+                    </div>
+                    <div class="flex justify-around ml-5">
+                        <template x-for="(image, index) in $store.state.playerImages['2']">
+                            <figure class="m-5">
+                                <img :src="image" alt="Placeholder">
+                            </figure>
+                        </template>
+                    </div>
                 </section>
             </div>
         </template>
         <template x-if="$store.state.state === 'final'">
-            <h2 class="text-4xl text-center">Finale!</h2>
+            <div>
+                <h2 class="mt-8 text-white text-4xl text-center">Finale!</h2>
+                <section class="flex justify-around mt-32">
+                    <img :src="$store.state.playerImages['1'][$store.state.playerFavorites['1']]">
+                    <img :src="$store.state.playerImages['2'][$store.state.playerFavorites['2']]">
+                </section>
+            </div>
         </template>
     </div>
 </body>

@@ -89,12 +89,16 @@
                 state: "",
                 challengeType: "",
                 challengePayload: "",
-                playerPrompts: {},
+                playerPrompts: {
+                    "1": "",
+                    "2": ""
+                },
                 playerImages: {},
                 playerFavorites: {},
 
                 updateState(msg) {
                     this.state = msg.state
+                    this.playerPrompts = msg.playerPrompts
                     if (msg.hasOwnProperty("challenge") && msg.challenge !== null) {
                         this.challengeType = msg.challenge.type
                         this.challengePayload = msg.challenge.challenge
@@ -117,7 +121,9 @@
                 },
 
                 updatePrompt(msg) {
-                    this.playerPrompts[msg.playerID] = msg.msg
+                    console.log(msg)
+                    this.playerPrompts[msg.player] = msg.msg
+                    console.log("update", this.playerPrompts)
                 }
             })
             webSocket = new WebSocket('ws://localhost:3000/beamer/ws');
@@ -148,10 +154,10 @@
             <h1 class="text-3xl text-center" x-text="$store.state.challengePayload"></h1>
         </template>
         <template x-if="$store.state.state === 'prompt'">
-            <div>
-                <div x-text="$store.state.playerPrompts['1']">
+            <div class="flex justify-around m-10">
+                <div x-text="$store.state.playerPrompts['1']" class="bg-white text-lg rounded p-4 border-black border border-4 rounded-3xl w-full mr-5">
                 </div>
-                <div x-text="$store.state.playerPrompts['2']">
+                <div x-text="$store.state.playerPrompts['2']" class="bg-white text-lg rounded p-4 border-black border border-4 rounded-3xl w-full ml-5">
                 </div>
             </div>
         </template>

@@ -16,6 +16,7 @@ type Server struct {
 	CurrentChallenge   *config.Challenge
 	PlayerPromptImages map[string][]string
 	PlayerFavorite     map[string]int
+	PlayerPrompts      map[string]string
 
 	FrontendMessages map[*websocket.Conn]chan []byte
 }
@@ -31,6 +32,7 @@ func NewServer() *Server {
 		GameState:          OpeningState,
 		PlayerPromptImages: map[string][]string{},
 		PlayerFavorite:     map[string]int{},
+		PlayerPrompts:      map[string]string{},
 		FrontendMessages:   make(map[*websocket.Conn]chan []byte),
 	}
 

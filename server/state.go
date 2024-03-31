@@ -19,8 +19,9 @@ const (
 
 func (server *Server) generateStateMsg() map[string]interface{} {
 	stateMsg := map[string]interface{}{
-		"type":  "state",
-		"state": server.GameState,
+		"type":          "state",
+		"state":         server.GameState,
+		"playerPrompts": server.PlayerPrompts,
 	}
 	if server.GameState != OpeningState {
 		stateMsg["challenge"] = server.CurrentChallenge

@@ -87,6 +87,7 @@ func (server *Server) playerWebsocket() func(*fiber.Ctx) error {
 			case "prompt":
 				// input message from player, add player before broadcast
 				msg["player"] = playerID
+				server.PlayerPrompts[playerID] = msg["msg"].(string)
 				server.broadcastToOther(conn, msg)
 			case "pick":
 				image := int(msg["image"].(float64))

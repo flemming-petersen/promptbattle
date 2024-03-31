@@ -22,7 +22,7 @@
 
                 updateState(msg) {
                     this.state = msg.state
-                    if (msg.challenge !== null) {
+                    if (msg.hasOwnProperty("challenge") && msg.challenge !== null) {
                         this.challengeType = msg.challenge.type
                         this.challengePayload = msg.challenge.challenge
                     } else {
@@ -30,13 +30,13 @@
                         this.challengePayload = ""
                     }
 
-                    if (msg.playerImages !== null) {
+                    if (msg.hasOwnProperty("playerImages") && msg.playerImages !== null) {
                         this.playerImages = msg.playerImages
                     } else {
                         this.playerImages = {}
                     }
 
-                    if (msg.playerFavorite !== null) {
+                    if (msg.hasOwnProperty("playerFavorite") && msg.playerFavorite !== null) {
                         this.playerFavorites = msg.playerFavorite
                     } else {
                         this.playerFavorites = {}
@@ -54,6 +54,11 @@
             };
             webSocket.onmessage = (event) => {
                 const msg = JSON.parse(event.data);
+                if (!msg.hasOwnProperty('type')) {
+                    console.error('Message has no type', msg);
+                    return
+                }
+
                 if (msg.type === "state") {
                     Alpine.store('state').updateState(msg)
                 } else if (msg.type === "prompt") {

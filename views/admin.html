@@ -6,97 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .bg-conic {
-            background-color: #378CE7;
-            background-image: conic-gradient(#5356FF 0%,
-                    #5356FF 3%,
-                    #378CE7 3%,
-                    #378CE7 6%,
-                    #5356FF 6%,
-                    #5356FF 9%,
-                    #378CE7 9%,
-                    #378CE7 12%,
-                    #5356FF 12%,
-                    #5356FF 15%,
-                    #378CE7 15%,
-                    #378CE7 18%,
-                    #5356FF 18%,
-                    #5356FF 21%,
-                    #378CE7 21%,
-                    #378CE7 24%,
-                    #5356FF 24%,
-                    #5356FF 27%,
-                    #378CE7 27%,
-                    #378CE7 30%,
-                    #5356FF 30%,
-                    #5356FF 33%,
-                    #378CE7 33%,
-                    #378CE7 36%,
-                    #5356FF 36%,
-                    #5356FF 39%,
-                    #378CE7 39%,
-                    #378CE7 42%,
-                    #5356FF 42%,
-                    #5356FF 45%,
-                    #378CE7 45%,
-                    #378CE7 48%,
-                    #5356FF 48%,
-                    #5356FF 51%,
-                    #378CE7 51%,
-                    #378CE7 54%,
-                    #5356FF 54%,
-                    #5356FF 57%,
-                    #378CE7 57%,
-                    #378CE7 60%,
-                    #5356FF 60%,
-                    #5356FF 63%,
-                    #378CE7 63%,
-                    #378CE7 66%,
-                    #5356FF 66%,
-                    #5356FF 69%,
-                    #378CE7 69%,
-                    #378CE7 72%,
-                    #5356FF 72%,
-                    #5356FF 75%,
-                    #378CE7 75%,
-                    #378CE7 78%,
-                    #5356FF 78%,
-                    #5356FF 81%,
-                    #378CE7 81%,
-                    #378CE7 84%,
-                    #5356FF 84%,
-                    #5356FF 87%,
-                    #378CE7 87%,
-                    #378CE7 90%,
-                    #5356FF 90%,
-                    #5356FF 93%,
-                    #378CE7 93%,
-                    #378CE7 96%,
-                    #5356FF 96%,
-                    #5356FF 99%,
-                    #378CE7 99%,
-                    #378CE7 102%);
-        }
-    </style>
 </head>
 
-<body class="h-screen min-h-screen bg-conic">
+<body class="h-screen min-h-screen dark:text-white dark:bg-slate-800">
     <section class="m-auto mt-12 grid col-2 gap-8 w-6/12">
-        <a class="text-center bg-white rounded p-4 border-black border border-4" href="/admin/state/opening">Opening
+        <a class="text-center rounded p-4 border-black border border-4" href="/admin/state/opening">Opening
             (Reset)</a>
-        <a class="text-center bg-white rounded p-4 border-black border border-4"
+        <a class="text-center rounded p-4 border-black border border-4"
             href="/admin/state/announcing">Announcing</a>
-        <a class="text-center bg-white rounded p-4 border-black border border-4" onclick="startTimer"
+        <a class="text-center rounded p-4 border-black border border-4" onclick="startTimer"
             href="/admin/state/prompt">Prompting</a>
-        <a class="text-center bg-white rounded p-4 border-black border border-4"
+        <a class="text-center rounded p-4 border-black border border-4"
             href="/admin/state/generate">Generate</a>
-        <a class="text-center bg-white rounded p-4 border-black border border-4" href="/admin/state/pick">Pick</a>
-        <a class="text-center bg-white rounded p-4 border-black border border-4" href="/admin/state/final">Final</a>
+        <a class="text-center rounded p-4 border-black border border-4" href="/admin/state/pick">Pick</a>
+        <a class="text-center rounded p-4 border-black border border-4" href="/admin/state/final">Final</a>
     </section>
     <Section>
-        <h1 class="mt-8 text-white text-xl text-center">Vergangene Sekunden:</h1>
-        <h2 class="text-white text-4xl text-center" id="timer">0</h2>
+        <h1 class="mt-8  text-xl text-center">Vergangene Sekunden:</h1>
+        <h2 class="text-4xl text-center" id="timer">0</h2>
     </Section>
     <script>
         if (window.location.search.includes("state=prompting")) {

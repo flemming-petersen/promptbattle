@@ -3,8 +3,9 @@ package server
 import (
 	"fmt"
 
-	"github.com/flemming-petersen/promptbattle/config"
+	configModule "github.com/flemming-petersen/promptbattle/config"
 	"github.com/flemming-petersen/promptbattle/models"
+	"github.com/flemming-petersen/promptbattle/openai"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	html "github.com/gofiber/template/html/v2"
@@ -13,8 +14,11 @@ import (
 type Server struct {
 	App *fiber.App
 
-	CurrentChallenge *config.Challenge
-	GameState        *models.State
+	Config                *configModule.Config
+	CurrentChallenge      *configModule.Challenge
+	CurrentChallengeIndex int
+	GameState             *models.State
+	OpenAiClient          *openai.Client
 
 	FrontendMessages map[*websocket.Conn]chan []byte
 }
@@ -23,12 +27,16 @@ func NewServer() *Server {
 	engine := html.New("./views", ".html")
 	engine.Reload(true)
 
+	config := configModule.ReadConfig()
+
 	server := &Server{
 		App: fiber.New(fiber.Config{
 			Views: engine,
 		}),
 		GameState:        models.NewState(),
 		FrontendMessages: make(map[*websocket.Conn]chan []byte),
+		Config:           config,
+		OpenAiClient:     openai.NewClient(config),
 	}
 
 	server.App.Get("/player/:id", func(c *fiber.Ctx) error {

@@ -7,82 +7,9 @@
     <title>Promptbattle</title>
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .bg-conic {
-            background-color: #378CE7;
-            background-image: conic-gradient(#5356FF 0%,
-                    #5356FF 3%,
-                    #378CE7 3%,
-                    #378CE7 6%,
-                    #5356FF 6%,
-                    #5356FF 9%,
-                    #378CE7 9%,
-                    #378CE7 12%,
-                    #5356FF 12%,
-                    #5356FF 15%,
-                    #378CE7 15%,
-                    #378CE7 18%,
-                    #5356FF 18%,
-                    #5356FF 21%,
-                    #378CE7 21%,
-                    #378CE7 24%,
-                    #5356FF 24%,
-                    #5356FF 27%,
-                    #378CE7 27%,
-                    #378CE7 30%,
-                    #5356FF 30%,
-                    #5356FF 33%,
-                    #378CE7 33%,
-                    #378CE7 36%,
-                    #5356FF 36%,
-                    #5356FF 39%,
-                    #378CE7 39%,
-                    #378CE7 42%,
-                    #5356FF 42%,
-                    #5356FF 45%,
-                    #378CE7 45%,
-                    #378CE7 48%,
-                    #5356FF 48%,
-                    #5356FF 51%,
-                    #378CE7 51%,
-                    #378CE7 54%,
-                    #5356FF 54%,
-                    #5356FF 57%,
-                    #378CE7 57%,
-                    #378CE7 60%,
-                    #5356FF 60%,
-                    #5356FF 63%,
-                    #378CE7 63%,
-                    #378CE7 66%,
-                    #5356FF 66%,
-                    #5356FF 69%,
-                    #378CE7 69%,
-                    #378CE7 72%,
-                    #5356FF 72%,
-                    #5356FF 75%,
-                    #378CE7 75%,
-                    #378CE7 78%,
-                    #5356FF 78%,
-                    #5356FF 81%,
-                    #378CE7 81%,
-                    #378CE7 84%,
-                    #5356FF 84%,
-                    #5356FF 87%,
-                    #378CE7 87%,
-                    #378CE7 90%,
-                    #5356FF 90%,
-                    #5356FF 93%,
-                    #378CE7 93%,
-                    #378CE7 96%,
-                    #5356FF 96%,
-                    #5356FF 99%,
-                    #378CE7 99%,
-                    #378CE7 102%);
-        }
-    </style>
 </head>
 
-<body class="h-screen min-h-screen bg-conic">
+<body class="h-screen min-h-screen dark:text-white dark:bg-slate-800">
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('state', {
@@ -121,49 +48,53 @@
         })
     </script>
     <div x-data>
-        <template x-if="$store.state.phase === 'opening'">
-            <h1 class="mt-8 text-white text-4xl text-center">Promptbattle</h1>
-        </template>
-        <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge')">
-            <h1 class="text-3xl text-center" x-text="$store.state.challenge.challenge"></h1>
-        </template>
-        <template x-if="$store.state.phase === 'prompting'">
-            <div class="flex justify-around m-10">
-                <template x-for="(player, index) in $store.state.players">
-                    <div x-text="player.prompt" class="bg-white text-lg rounded p-4 border-black border border-4 rounded-3xl w-full mr-5">
-                    </div>
+        <div class="grid grid-cols-2 h-screen items-center justify-items-center" style="grid-template-rows: 1fr 1.8fr;">
+            <div class="col-span-2">
+                <template x-if="$store.state.phase === 'opening'">
+                    <h1 class="mt-8 text-white text-4xl text-center">Promptbattle</h1>
+                </template>
+                <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge')">
+                    <h1 class="text-4xl text-center" x-text="$store.state.challenge.challenge"></h1>
+                </template>
+                <template x-if="$store.state.phase === 'prompting'">
+                    <h2 class="text-2xl text-center mt-8">Prompting!</h2>
+                </template>
+                <template x-if="$store.state.phase === 'generate'">
+                    <h2 class="text-2xl text-center mt-8">Generator work...</h2>
+                </template>
+                <template x-if="$store.state.phase === 'final'">
+                    <h2 class="mt-8 text-white text-4xl text-center">Finale!</h2>
+                </template>
+                <template x-if="$store.state.phase === 'picking'">
+                    <h2 class="text-4xl text-center">Select your fav!</h2>
                 </template>
             </div>
-        </template>
-        <template x-if="$store.state.phase === 'generate'">
-            <h2 class="text-2xl text-center mt-8">Generator work...</h2>
-        </template>
-        <template x-if="$store.state.phase === 'picking'">
-            <div x-data="{clicked: false}">
-                <h2 class="text-4xl text-center">Select your fav!</h2>
-                <section class="flex justify-around mt-16">
-                    <template x-for="(player, index) in $store.state.players">
-                        <div class="flex justify-around mr-5">
-                            <template x-for="(image, index) in player.generatedImages">
-                                <figure class="m-5">
-                                    <img :src="image" alt="Placeholder">
-                                </figure>
-                            </template>
-                        </div>
-                    </template>
-                </section>
-            </div>
-        </template>
-        <template x-if="$store.state.phase === 'final'">
-            <div>
-                <h2 class="mt-8 text-white text-4xl text-center">Finale!</h2>
-                <section class="flex justify-around mt-32">
-                    <template x-for="(player, index) in $store.state.players">
+            <template x-if="$store.state.phase === 'prompting'">
+                <template x-for="(player, index) in $store.state.players">
+                    <div :style="{background: player.color}" class="p-10 h-full w-full overflow-hidden relative">
+                        <div x-text="player.prompt" class="absolute bottom-10 hyphens-auto text-black text-4xl"></div>
+                    </div>
+                </template>
+            </template>
+            <template x-if="$store.state.phase === 'picking'">
+                <template x-for="(player, index) in $store.state.players">
+                    <div :style="{background: player.color}" class="grid grid-cols-2 grid-rows-2">
+                        <template x-for="(image, index) in player.generatedImages">
+                            <figure class="m-5">
+                                <img :src="image" alt="Placeholder">
+                            </figure>
+                        </template>
+                    </div>
+                </template>
+            </template>
+            <template x-if="$store.state.phase === 'final'">
+                <template x-for="(player, index) in $store.state.players">
+                    <div :style="{background: player.color}" class="p-10">
                         <img :src="player.generatedImages[player.favoriteImage]">
-                    </template>
-                </section>
-            </div>
-        </template>
+                    </div>
+                </template>
+            </template>
+        </div>
     </div>
 </body>
 

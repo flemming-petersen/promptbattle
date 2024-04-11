@@ -9,6 +9,7 @@ func (server *Server) generateStateMsg() map[string]interface{} {
 			"prompt":          player.Prompt,
 			"generatedImages": player.GeneratedImages,
 			"favoriteImage":   player.FavoriteImage,
+			"color": 		   player.Color,
 		}
 	}
 

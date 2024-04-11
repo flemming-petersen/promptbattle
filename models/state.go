@@ -27,8 +27,8 @@ func NewState() *State {
 		phase: OpeningState,
 		players: map[string]*Player{
 			// only here defined playerIDs are allowed to join
-			"1": {ID: "1"},
-			"2": {ID: "2"},
+			"1": {ID: "1", Color: "#00D6C4"},
+			"2": {ID: "2", Color: "#d98524"},
 		},
 	}
 }

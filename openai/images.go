@@ -24,24 +24,24 @@ func NewClient(configuration *config.Config) *Client {
 }
 
 type requestImagePayload struct {
-	Model string `json:"model"`
+	Model  string `json:"model"`
 	Prompt string `json:"prompt"`
-	N int `json:"n"`
-	Size string `json:"size"`
+	N      int    `json:"n"`
+	Size   string `json:"size"`
 }
 
 type responseImagePayload struct {
-	Images []struct{
+	Images []struct {
 		URL string `json:"url"`
 	} `json:"data"`
 }
 
 func (client *Client) GeneratedImages(prompt string) ([]string, error) {
 	payload := requestImagePayload{
-		Model: "dall-e-2",
+		Model:  "dall-e-2",
 		Prompt: prompt,
-		N: 4,
-		Size: "256x256",
+		N:      4,
+		Size:   "256x256",
 	}
 
 	body, err := json.Marshal(payload)
@@ -70,7 +70,7 @@ func (client *Client) GeneratedImages(prompt string) ([]string, error) {
 			return nil, err
 		}
 
-		fmt.Println("error response", string(responsePayload))
+		fmt.Printf("[OpenAI] error response %d: %s\n", response.StatusCode, string(responsePayload))
 		return nil, errors.New("error from openAI")
 	}
 

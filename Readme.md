@@ -3,7 +3,9 @@
 ## Todo's
 - [x] Read cheallanges from json file
 - [x] Enhance design
-- [ ] generate images via Dalle-2 and proxy them
+- [x] generate images via Dalle-2 and proxy them
+- [x] reconnect websocket if connection is lost
+- [x] fallback prompt, if no player prompt is available
 - [ ] Fallback if dalle-2 is rejecting requests
 
 ### Would be nice

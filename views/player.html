@@ -18,6 +18,13 @@
                 challenge: {},
 
                 updateState(event) {
+                    if (this.phase !== event.phase) {
+                        console.log('Phase changed to', event.phase);
+                    }
+                    if (this.challenge !== event.challenge) {
+                        console.log('Challenge changed to', event.challenge);
+                    }
+
                     this.phase = event.phase
                     this.players = event.players
                     this.challenge = event.challenge
@@ -27,12 +34,10 @@
                     this.players[event.player].prompt = event.prompt
                 }
             })
-            webSocket = new WebSocket('ws://localhost:3000/player/{{.ID}}/ws');
-            webSocket.onopen = (event) => {
-                webSocket.send(JSON.stringify({ type: "ready" }));
-                console.log('Connected to server');
-            };
-            webSocket.onmessage = (event) => {
+
+            var webSocket = null;
+
+            const onWebsocketMessage = (event) => {
                 const msg = JSON.parse(event.data);
                 if (!msg.hasOwnProperty('type')) {
                     console.error('Message has no type', msg);
@@ -42,7 +47,29 @@
                 if (msg.type === "state") {
                     Alpine.store('state').updateState(msg)
                 }
-            };
+            }
+
+            const onWebsocketOpen = (event) => {
+                webSocket.send(JSON.stringify({ type: "ready" }));
+                console.log('Connected to server');
+            }
+
+            const onWebsocketClose = (event) => {
+                if (webSocket) {
+                    console.error("Websocket closed unexpectedly")
+                }
+
+                setTimeout(() => {
+                    webSocket = new WebSocket('ws://localhost:3000/player/{{.ID}}/ws');
+                    webSocket.addEventListener('open', onWebsocketOpen);
+                    webSocket.addEventListener('message', onWebsocketMessage);
+                    webSocket.addEventListener('close', onWebsocketClose);
+                    window.webSocket = webSocket;
+                }, 100);
+            }
+
+            // start websocket connection
+            onWebsocketClose();
         })
     </script>
     <div x-data>
@@ -63,9 +90,10 @@
             </div>
             <template x-if="$store.state.phase === 'prompting'">
                 <div id="data" x-data="{ prompt: '' }" class="w-full h-full">
-                    <textarea autofocus :style="{background: $store.state.players['{{.ID}}'].color}" class="text-4xl text-black p-4 border-black w-full h-full focus:outline-none"
-                        type="text" name="prompt" x-model="prompt"
-                        x-on:input="webSocket.send(JSON.stringify({type: 'prompt', prompt: prompt}))"></textarea>
+                    <textarea autofocus :style="{background: $store.state.players['{{.ID}}'].color}"
+                        class="text-4xl text-black p-4 border-black w-full h-full focus:outline-none" type="text"
+                        name="prompt" x-model="prompt"
+                        x-on:input="window.webSocket.send(JSON.stringify({type: 'prompt', prompt: prompt}))"></textarea>
                 </div>
             </template>
             <template x-if="$store.state.phase === 'generate'">
@@ -75,13 +103,15 @@
             </template>
             <template x-if="$store.state.phase === 'picking'">
                 <div x-data="{clicked: false, selectedImageIndex: -1}">
-                    <div :style="{background: $store.state.players['{{.ID}}'].color}" class="grid grid-cols-2 grid-rows-2">
+                    <div :style="{background: $store.state.players['{{.ID}}'].color}"
+                        class="grid grid-cols-2 grid-rows-2">
                         <template x-for="(image, index) in $store.state.players['{{.ID}}'].generatedImages">
                             <figure class="m-5">
                                 <img :src="image" alt="Placeholder">
                                 <figcaption class="mt-12">
-                                    <button :class="{'bg-slate-800': selectedImageIndex == index}" class="rounded p-4 border-black border border-4 rounded-3xl block w-full text-lg hover:border-white"
-                                        x-on:click="clicked=true; selectedImageIndex=index; webSocket.send(JSON.stringify({type: 'pick', image: index}))">Wählen</button>
+                                    <button :class="{'bg-slate-800': selectedImageIndex == index}"
+                                        class="rounded p-4 border-black border border-4 rounded-3xl block w-full text-lg hover:border-white"
+                                        x-on:click="clicked=true; selectedImageIndex=index; window.webSocket.send(JSON.stringify({type: 'pick', image: index}))">Wählen</button>
                                 </figcaption>
                             </figure>
                         </template>
@@ -89,10 +119,10 @@
                 </div>
             </template>
             <template x-if="$store.state.phase === 'final'">
-                <div class="grid grid-cols-2 grid-rows-1">
+                <div class="grid grid-cols-2 grid-rows-1 w-full">
                     <template x-for="(player, index) in $store.state.players">
                         <div :style="{background: player.color}" class="p-10">
-                            <img :src="player.generatedImages[player.favoriteImage]">
+                            <img :src="player.generatedImages[player.favoriteImage]" class="w-full">
                         </div>
                     </template>
                 </div>

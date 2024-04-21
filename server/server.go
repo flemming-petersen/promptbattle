@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"os"
 
 	configModule "github.com/flemming-petersen/promptbattle/config"
 	"github.com/flemming-petersen/promptbattle/models"
@@ -38,6 +39,13 @@ func NewServer() *Server {
 		Config:           config,
 		OpenAiClient:     openai.NewClient(config),
 	}
+
+	// Create the folder for the prompt images
+	if err := os.MkdirAll(server.Config.PromptImageBasePath, 0755); err != nil {
+		panic(err)
+	}
+
+	server.App.Static(config.PromptImageURLPrefix, config.PromptImageBasePath)
 
 	server.App.Get("/player/:id", func(c *fiber.Ctx) error {
 		// check if player exists, no dynamic player creation

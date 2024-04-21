@@ -20,10 +20,20 @@ func ReadConfig() *Config {
 	}
 
 	if err := godotenv.Load(); err != nil {
-        panic(err)
-    }
+		panic(err)
+	}
 
 	config.OpenAiKey = os.Getenv("OPENAI_KEY")
+	config.PromptImageBasePath = os.Getenv("IMAGE_BASE_PATH")
+	config.PromptImageURLPrefix = os.Getenv("IMAGE_URL_PREFIX")
+
+	if config.PromptImageBasePath == "" {
+		config.PromptImageBasePath = "./images"
+	}
+
+	if config.PromptImageURLPrefix == "" {
+		config.PromptImageURLPrefix = "/prompts"
+	}
 
 	return config
 }

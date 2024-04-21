@@ -38,7 +38,10 @@ func (server *Server) startWebsocket(conn *websocket.Conn, msgHandler func(serve
 		// read message
 		websocketMessageType, rawMsg, err = conn.ReadMessage()
 		if err != nil {
-			fmt.Println("read:", err)
+			if !websocket.IsCloseError(err, websocket.CloseGoingAway) {
+				fmt.Println("read:", err)
+			}
+
 			break
 		}
 
@@ -80,13 +83,15 @@ func (server *Server) playerWebsocket() func(*fiber.Ctx) error {
 			playerID := conn.Params("id")
 
 			if !server.GameState.IsPlayerExist(playerID) {
-				fmt.Printf("Player %s does not exist\n", playerID)
+				fmt.Printf("[Player: %s] Player does not exist\n", playerID)
 				return
 			}
 
 			messageType := msg["type"].(string)
 			switch messageType {
 			case "ready":
+				fmt.Printf("[Player: %s] Ready connected!\n", playerID)
+
 				// player connection is ready!
 				server.send(conn, server.generateStateMsg())
 			case "prompt":
@@ -101,7 +106,7 @@ func (server *Server) playerWebsocket() func(*fiber.Ctx) error {
 			case "pick":
 				image := int(msg["image"].(float64))
 
-				fmt.Printf("Player %s select image %d", playerID, image)
+				fmt.Printf("[Player: %s] select image %d\n", playerID, image)
 
 				// set favorite image for player
 				server.GameState.SetFavoriteImage(playerID, image)
@@ -111,7 +116,7 @@ func (server *Server) playerWebsocket() func(*fiber.Ctx) error {
 					server.broadcastToAll(server.generateStateMsg())
 				}
 			default:
-				fmt.Printf("Unknown message type %s from player %s\n", messageType, playerID)
+				fmt.Printf("[Player: %s] Unknown message type %s\n", playerID, messageType)
 			}
 		})
 	})

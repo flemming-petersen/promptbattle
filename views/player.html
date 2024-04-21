@@ -78,8 +78,11 @@
                 <template x-if="$store.state.phase === 'opening'">
                     <h1 class="mt-2 text-4xl text-center">Promptbattle</h1>
                 </template>
-                <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge')">
-                    <h1 class="mt-2 text-4xl text-center" x-text="$store.state.challenge.challenge"></h1>
+                <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge') && $store.state.challenge.type === 'text'">
+                        <h1 class="mt-2 text-4xl text-center" x-text="$store.state.challenge.challenge"></h1>
+                </template>
+                <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge') && $store.state.challenge.type === 'image'">
+                    <img class="mx-auto max-h-80" :src="$store.state.challenge.challenge" alt="">
                 </template>
                 <template x-if="$store.state.phase === 'prompting'">
                     <h2 class="text-2xl mb-5 text-center">Schreibe deinen Prompt!</h2>

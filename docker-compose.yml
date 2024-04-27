@@ -1,0 +1,54 @@
+networks:
+  web:
+    external: true
+
+volumes:
+  letsencrypt:
+
+services:
+  app:
+    image: ghcr.io/flemming-petersen/promptbattle:latest
+    restart: always
+    networks:
+      - web
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.middlewares.pb.headers.stsseconds=31536000"
+        - "traefik.http.routers.pb.middlewares=pb"
+        - "traefik.http.routers.pb.rule=Host(`pb.flemming.cloud`)"
+        - "traefik.http.routers.pb.entrypoints=https,http"
+        - "traefik.http.services.pb.loadbalancer.server.port=3000"
+        - "traefik.http.routers.pb.tls.certresolver=tls"
+        - "traefik.docker.network=web"
+        - "traefik.http.middlewares.pb.basicauth.users=pb:$$2y$$05$$UEq7nAFrqHK7mmsXQbm/L.9Ze0YEdRb83n11QdW7V0g45xf4qMqoK"
+    depends_on:
+      - traefik
+    volumes:
+      - .env:/app/.env
+
+  traefik:
+    image: "traefik:v2.10"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - web
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - "letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: always
+    command:
+      - --api.insecure=false
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --entrypoints.https.address=:443
+      - --entrypoints.http.address=:80
+      - --entrypoints.http.http.redirections.entryPoint.to=https
+      - --entrypoints.http.http.redirections.entryPoint.scheme=https
+      - --certificatesresolvers.tls.acme.tlschallenge=true
+      - --certificatesresolvers.tls.acme.email=le@flemming.cloud
+      - --certificatesresolvers.tls.acme.storage=/letsencrypt/acme.json

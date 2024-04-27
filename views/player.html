@@ -60,7 +60,7 @@
                 }
 
                 setTimeout(() => {
-                    webSocket = new WebSocket('ws://localhost:3000/player/{{.ID}}/ws');
+                    webSocket = new WebSocket('ws://pb.flemming.cloud/player/{{.ID}}/ws');
                     webSocket.addEventListener('open', onWebsocketOpen);
                     webSocket.addEventListener('message', onWebsocketMessage);
                     webSocket.addEventListener('close', onWebsocketClose);

@@ -1,26 +1,14 @@
 [
     {
-        "type": "text",
-        "challenge": "Random Aufgaben"
-    },
-    {
         "type": "image",
         "challenge": "https://barcamp-flensburg.de/fileadmin/user_upload/fotos/2023/barcamp-flensburg-v1-2023-6.jpeg"
     },
     {
         "type": "text",
-        "challenge": "Random Aufgaben2"
+        "challenge": "Wie sieht der Verkehr in 50 Jahren aus?"
     },
     {
         "type": "text",
-        "challenge": "Random Aufgaben3"
-    },
-    {
-        "type": "text",
-        "challenge": "Random Aufgaben4"
-    },
-    {
-        "type": "text",
-        "challenge": "Random Aufgaben5"
+        "challenge": "Wie sieht die Aftershow Party des Barcamps aus?"
     }
 ]

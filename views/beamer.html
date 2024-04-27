@@ -27,7 +27,7 @@
                     this.players[event.player].prompt = event.prompt
                 }
             })
-            webSocket = new WebSocket('ws://pb.flemming.cloud/beamer/ws');
+            webSocket = new WebSocket('wss://pb.flemming.cloud/beamer/ws');
             webSocket.onopen = (event) => {
                 webSocket.send(JSON.stringify({ type: "ready" }));
                 console.log('Connected to server');

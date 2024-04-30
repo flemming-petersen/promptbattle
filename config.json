@@ -1,14 +1,62 @@
 [
     {
+        "type": "text",
+        "challenge": "Wie sieht der Verkehr in 50 Jahren aus?"
+    },
+    {
         "type": "image",
         "challenge": "https://barcamp-flensburg.de/fileadmin/user_upload/fotos/2023/barcamp-flensburg-v1-2023-6.jpeg"
     },
     {
         "type": "text",
-        "challenge": "Wie sieht der Verkehr in 50 Jahren aus?"
+        "challenge": "Wie sieht die Aftershow Party des Barcamps aus?"
     },
     {
         "type": "text",
-        "challenge": "Wie sieht die Aftershow Party des Barcamps aus?"
+        "challenge": "Wie sieht das Motto des Barcamp in einem Bild aus?"
+    },
+    {
+        "type": "text",
+        "challenge": "Zeig uns das Nordertor als Actionfigur"
+    },
+    {
+        "type": "text",
+        "challenge": "Zeige uns deinen Traumarbeitsplatz."
+    },
+    {
+        "type": "image",
+        "challenge": "https://live.staticflickr.com/65535/32867308547_0dbe81644e_c_d.jpg"
+    },
+    {
+        "type": "image",
+        "challenge": "https://live.staticflickr.com/65535/47810912991_67595535b8_c_d.jpg"
+    },
+    {
+        "type": "text",
+        "challenge": "Dort arbeiten wo andere Urlaub machen."
+    },
+    {
+        "test": "text",
+        "challenge": "Zeitreise-Fauxpas: Eine Person die aus der Zukunft oder Vergangenheit ins heute kommt."
+    },
+    {
+        "test": "text",
+        "challenge": "Flensburg Anno 1550."
+    },
+    {
+        "test": "text",
+        "challenge": "Dort Urlaub machen wo andere arbeiten."
+    },
+    {
+        "test": "text",
+        "challenge": "Eine Skatchnote der aktuellen Session."
+    },
+    {
+        "test": "text",
+        "challenge": "Die erste Spielekonsole von Apple."
+    },
+    {
+        "test": "text",
+        "challenge": "Zeitreise-Fauxpas: Eine Person die aus der Zukunft oder Vergangenheit ins heute kommt."
     }
 ]

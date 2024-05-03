@@ -29,11 +29,11 @@
     },
     {
         "type": "text",
-        "challenge": "Dort arbeiten wo andere Urlaub machen."
+        "challenge": "Arbeiten wo andere Urlaub machen."
     },
     {
         "test": "text",
-        "challenge": "Zeitreise-Fauxpas: Eine Person die aus der Zukunft oder Vergangenheit ins heute kommt."
+        "challenge": "Zeitreise-Fauxpas: Eine Person kommt aus der Zukunft oder Vergangenheit ins heute."
     },
     {
         "test": "text",
@@ -41,11 +41,11 @@
     },
     {
         "test": "text",
-        "challenge": "Dort Urlaub machen wo andere arbeiten."
+        "challenge": "Urlaub machen, wo andere arbeiten."
     },
     {
         "test": "text",
-        "challenge": "Eine Skatchnote der aktuellen Session."
+        "challenge": "Eine Sketchnote der aktuellen Session."
     },
     {
         "test": "text",

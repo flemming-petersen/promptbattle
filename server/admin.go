@@ -25,7 +25,11 @@ func (server *Server) openingRound() func(c *fiber.Ctx) error {
 			server.CurrentChallengeIndex = 0
 		}
 
+		fmt.Printf("[Admin] Set challenge to index %d\n", server.CurrentChallengeIndex)
+
 		server.CurrentChallenge = server.Config.Challenges[server.CurrentChallengeIndex]
+
+		fmt.Printf("[Admin] Set challenge to %s\n", server.CurrentChallenge.Challenge)
 
 		server.broadcastToAll(server.generateStateMsg())
 		return c.Redirect("/admin")

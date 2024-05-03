@@ -34,10 +34,11 @@ func NewServer() *Server {
 		App: fiber.New(fiber.Config{
 			Views: engine,
 		}),
-		GameState:        models.NewState(),
-		FrontendMessages: make(map[*websocket.Conn]chan []byte),
-		Config:           config,
-		OpenAiClient:     openai.NewClient(config),
+		GameState:             models.NewState(),
+		FrontendMessages:      make(map[*websocket.Conn]chan []byte),
+		Config:                config,
+		CurrentChallengeIndex: -1,
+		OpenAiClient:          openai.NewClient(config),
 	}
 
 	// Create the folder for the prompt images

@@ -32,6 +32,10 @@
         "challenge": "Arbeiten wo andere Urlaub machen."
     },
     {
+        "type": "text",
+        "challenge": "Wie überquerst du die Flensburger Förde?",
+    },
+    {
         "test": "text",
         "challenge": "Zeitreise-Fauxpas: Eine Person kommt aus der Zukunft oder Vergangenheit ins heute."
     },

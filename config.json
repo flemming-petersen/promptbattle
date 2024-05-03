@@ -1,23 +1,15 @@
 [
     {
-        "type": "image",
-        "challenge": "https://barcamp-flensburg.de/fileadmin/user_upload/fotos/2023/barcamp-flensburg-v1-2023-6.jpeg"
-    },
-    {
         "type": "text",
         "challenge": "Wie sieht die Aftershow Party des Barcamps aus?"
     },
     {
         "type": "text",
+        "challenge": "Wie sieht der Krankenhausneubau aus?"
+    },
+    {
+        "type": "text",
         "challenge": "Wie sieht das Motto des Barcamp in einem Bild aus?"
-    },
-    {
-        "type": "text",
-        "challenge": "Zeig uns das Nordertor als Actionfigur"
-    },
-    {
-        "type": "text",
-        "challenge": "Zeige uns deinen Traumarbeitsplatz."
     },
     {
         "type": "image",
@@ -25,11 +17,31 @@
     },
     {
         "type": "text",
+        "challenge": "Wie sieht das neue Hype-Gericht in bei der Teamtanke aus?"
+    },
+    {
+        "type": "text",
+        "challenge": "Zeige uns deinen Traumarbeitsplatz."
+    },
+    {
+        "type": "text",
         "challenge": "Arbeiten wo andere Urlaub machen."
     },
     {
         "type": "text",
-        "challenge": "Wie überquerst du die Flensburger Förde?",
+        "challenge": "Beschreibe die Flensburger Punkte in einem Bild."
+    },
+    {
+        "type": "text",
+        "challenge": "Wie sieht Reichtum für dich aus?"
+    },
+    {
+        "type": "image",
+        "challenge": "https://barcamp-flensburg.de/fileadmin/user_upload/fotos/2023/barcamp-flensburg-v1-2023-6.jpeg"
+    },
+    {
+        "type": "text",
+        "challenge": "Wie überquerst du die Flensburger Förde?"
     },
     {
         "test": "text",

@@ -28,10 +28,6 @@
         "challenge": "https://live.staticflickr.com/65535/32867308547_0dbe81644e_c_d.jpg"
     },
     {
-        "type": "image",
-        "challenge": "https://live.staticflickr.com/65535/47810912991_67595535b8_c_d.jpg"
-    },
-    {
         "type": "text",
         "challenge": "Dort arbeiten wo andere Urlaub machen."
     },
@@ -58,5 +54,17 @@
     {
         "test": "text",
         "challenge": "Zeitreise-Fauxpas: Eine Person die aus der Zukunft oder Vergangenheit ins heute kommt."
+    },
+    {
+        "type": "image",
+        "challenge": "https://live.staticflickr.com/65535/47810912991_67595535b8_c_d.jpg"
+    },
+    {
+        "test": "text",
+        "challenge": "Wie sieht die KI in Person aus?"
+    },
+    {
+        "test": "text",
+        "challenge": "Wie sieht die Karibik vor Dänemark aus?"
     }
 ]

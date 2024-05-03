@@ -8,7 +8,7 @@
         "challenge": "Wie sieht der Krankenhausneubau aus?"
     },
     {
-        "test": "text",
+        "type": "text",
         "challenge": "Wie sieht die Karibik vor Dänemark aus?"
     },
     {
@@ -48,23 +48,23 @@
         "challenge": "Wie überquerst du die Flensburger Förde?"
     },
     {
-        "test": "text",
+        "type": "text",
         "challenge": "Zeitreise-Fauxpas: Eine Person kommt aus der Zukunft oder Vergangenheit ins heute."
     },
     {
-        "test": "text",
+        "type": "text",
         "challenge": "Flensburg Anno 1550."
     },
     {
-        "test": "text",
+        "type": "text",
         "challenge": "Urlaub machen, wo andere arbeiten."
     },
     {
-        "test": "text",
+        "type": "text",
         "challenge": "Die erste Spielekonsole von Apple."
     },
     {
-        "test": "text",
+        "type": "text",
         "challenge": "Zeitreise-Fauxpas: Eine Person die aus der Zukunft oder Vergangenheit ins heute kommt."
     },
     {
@@ -72,7 +72,7 @@
         "challenge": "https://live.staticflickr.com/65535/47810912991_67595535b8_c_d.jpg"
     },
     {
-        "test": "text",
+        "type": "text",
         "challenge": "Wie sieht die KI in Person aus?"
     },
     {
@@ -80,7 +80,7 @@
         "challenge": "Wie sieht der Verkehr in 50 Jahren aus?"
     },
     {
-        "test": "text",
+        "type": "text",
         "challenge": "Eine Sketchnote der aktuellen Session."
     }
 ]

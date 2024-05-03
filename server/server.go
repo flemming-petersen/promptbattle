@@ -61,6 +61,7 @@ func NewServer() *Server {
 		if err != nil {
 			fmt.Println(err)
 		}
+
 		return err
 	})
 	server.App.Get("/player/:id/ws", server.playerWebsocket())

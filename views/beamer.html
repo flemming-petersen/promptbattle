@@ -6,7 +6,8 @@
     <title>Promptbattle</title>
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, minimal-ui" />
     <set var="device.fullscreensupport" val="true" devices="ipad" />
 </head>
 
@@ -54,10 +55,12 @@
                 <template x-if="$store.state.phase === 'opening'">
                     <h1 class="mt-8 text-white text-4xl text-center">Promptbattle</h1>
                 </template>
-                <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge') && $store.state.challenge.type === 'text'">
+                <template
+                    x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge') && $store.state.challenge.type === 'text'">
                     <h1 class="mt-2 text-4xl text-center" x-text="$store.state.challenge.challenge"></h1>
                 </template>
-                <template x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge') && $store.state.challenge.type === 'image'">
+                <template
+                    x-if="$store.state.phase !== 'opening' && $store.state.hasOwnProperty('challenge') && $store.state.challenge.type === 'image'">
                     <img class="mx-auto max-h-80" :src="$store.state.challenge.challenge" alt="">
                 </template>
                 <template x-if="$store.state.phase === 'prompting'">
@@ -92,13 +95,13 @@
                 </template>
             </template>
             <template x-if="$store.state.phase === 'final'">
-                <div class="grid grid-cols-2 grid-rows-1 w-full">
-                    <template x-for="(player, index) in $store.state.players">
+                <template x-for="(player, index) in $store.state.players">
+                    <div class="grid grid-cols-2 grid-rows-1 w-full">
                         <div :style="{background: player.color}" class="p-10">
                             <img :src="player.generatedImages[player.favoriteImage]" class="w-full">
                         </div>
-                    </template>
-                </div>
+                    </div>
+                </template>
             </template>
         </div>
     </div>

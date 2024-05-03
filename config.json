@@ -1,9 +1,5 @@
 [
     {
-        "type": "text",
-        "challenge": "Wie sieht der Verkehr in 50 Jahren aus?"
-    },
-    {
         "type": "image",
         "challenge": "https://barcamp-flensburg.de/fileadmin/user_upload/fotos/2023/barcamp-flensburg-v1-2023-6.jpeg"
     },
@@ -70,5 +66,9 @@
     {
         "test": "text",
         "challenge": "Wie sieht die Karibik vor Dänemark aus?"
+    },
+    {
+        "type": "text",
+        "challenge": "Wie sieht der Verkehr in 50 Jahren aus?"
     }
 ]

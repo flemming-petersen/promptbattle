@@ -8,6 +8,10 @@
         "challenge": "Wie sieht der Krankenhausneubau aus?"
     },
     {
+        "test": "text",
+        "challenge": "Wie sieht die Karibik vor Dänemark aus?"
+    },
+    {
         "type": "text",
         "challenge": "Wie sieht das Motto des Barcamp in einem Bild aus?"
     },
@@ -57,10 +61,6 @@
     },
     {
         "test": "text",
-        "challenge": "Eine Sketchnote der aktuellen Session."
-    },
-    {
-        "test": "text",
         "challenge": "Die erste Spielekonsole von Apple."
     },
     {
@@ -76,11 +76,11 @@
         "challenge": "Wie sieht die KI in Person aus?"
     },
     {
-        "test": "text",
-        "challenge": "Wie sieht die Karibik vor Dänemark aus?"
-    },
-    {
         "type": "text",
         "challenge": "Wie sieht der Verkehr in 50 Jahren aus?"
+    },
+    {
+        "test": "text",
+        "challenge": "Eine Sketchnote der aktuellen Session."
     }
 ]
